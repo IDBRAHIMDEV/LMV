@@ -1,0 +1,43 @@
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        
+        <h1>List of courses</h1>
+        <input [(ngModel)]="myCourse.name" type="text" class="form-control">
+
+        <button (click)="addCourse()" class="btn btn-primary btn-block">
+            <i class="fa fa-plus"></i> Add course
+        </button>
+
+        <ul class="list-group mt-2">
+            <li 
+              class="list-group-item" [ngClass]="{
+                  'list-group-item-success': f,
+                  'list-group-item-danger': l
+              }" 
+              *ngFor="let course of courses; index as i, first as f, last as l, even as e, odd as o">
+              index: {{ i }} - first: {{ f }} - last: {{ l }} - even: {{ e }} - odd: {{ o }}  
+              {{ course.name }}
+                <div class="text-right" id="options">
+                    <button class="btn btn-warning mr-1 btn-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button (click)="deleteCourse(course.id)" class="btn btn-danger mr-1 btn-sm">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <button (click)="statusCourse(course)" class="btn btn-sm" 
+                    [ngStyle]="{
+                        fontSize: course.active ? '30px' : '10px'
+                    }"
+                    [ngClass]="{
+                        'btn-success': course.active,
+                        'btn-dark': !course.active
+                    }">
+                        <i class="fa fa-power-off"></i>
+                    </button>
+                </div>
+            </li>
+        </ul>
+       
+    </div>
+</div>

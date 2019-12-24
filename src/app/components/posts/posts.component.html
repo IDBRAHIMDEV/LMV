@@ -1,0 +1,47 @@
+
+<div class="row my-3">
+    <div class="col-md-12">
+        <h1>List of posts</h1>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6 mx-auto">
+        <div class="form-group">
+            <label for="">Title</label>
+            <input [(ngModel)]="myPost.title" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="">Body</label>
+            <textarea [(ngModel)]="myPost.body" rows="2" class="form-control"></textarea>
+        </div>
+
+        <button (click)="persistPost()" class="btn btn-primary btn-block">
+            <i class="fa fa-send"></i> Add post</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Body</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let post of posts">
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.body }}</td>
+                    <td class="text-right" nowrap>
+                        <button class="btn btn-sm btn-warning mr-1"><i class="fa fa-pencil"></i></button>
+                        <button (click)="deletePost(post.id)" class="btn btn-sm btn-dark"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

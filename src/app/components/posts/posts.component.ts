@@ -1,3 +1,4 @@
+import { Post } from './../../models/post';
 import { PostService } from './../../services/post.service';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2'
@@ -9,11 +10,15 @@ import Swal from 'sweetalert2'
 })
 export class PostsComponent implements OnInit {
 
-  posts: any[] = [];
+  posts: Post[] = [];
 
-  myPost: any = {
+  editable: boolean = false;
+  display: boolean = false;
+
+  myPost: Post = {
     title: '',
-    body: ''
+    body: '',
+    active: false
   }
 
   constructor(private postService: PostService) { }
@@ -24,7 +29,7 @@ export class PostsComponent implements OnInit {
 
   getAllPosts() {
     this.postService.getAll()
-        .subscribe((posts: any[]) => {
+        .subscribe((posts: Post[]) => {
           this.posts = posts;
         })
   }
@@ -70,16 +75,67 @@ export class PostsComponent implements OnInit {
   //  } 
   }
 
-  persistPost() {
+  persistPost(form) {
+
+    if(form.invalid) {
+      alert('Please check your form !');
+      return;
+    }
     this.postService.persist(this.myPost)
-        .subscribe((post: any) => {
+        .subscribe((post: Post) => {
           this.posts = [post, ...this.posts];
           
           this.myPost = {
             title: '',
-            body: ''
+            body: '',
+            active: false
           }
         })
+  }
+
+  toggleForm(){
+    this.display = !this.display;
+  }
+
+  info(input) {
+    console.log(input);
+  }
+
+  editPost(post) {
+    this.display = true;
+    this.editable = true;
+    this.myPost = {
+      ...post
+    };
+  }
+
+  updatePost(form) {
+    if(form.invalid) {
+      alert('Please check your form !');
+      return;
+    }
+    this.postService.update(this.myPost)
+        .subscribe(res => {
+          this.editable = false;
+          this.display = false;
+          
+          let currentPost = {
+            ...this.myPost
+          }
+
+          this.posts = this.posts.map(post => post.id === this.myPost.id ? currentPost : post);
+          
+          console.log('posts:', this.posts)
+          form.reset();
+        })
+  }
+
+  switchActive(post: Post) {
+    let currentPost = {
+       active: !post.active
+    }
+    this.postService.patchPost(post.id, currentPost)
+        .subscribe((res: any) => post.active = res.active)
   }
 
 }

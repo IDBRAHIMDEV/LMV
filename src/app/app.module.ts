@@ -12,6 +12,7 @@ import { PostsComponent } from './components/posts/posts.component';
 
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { GithubComponent } from './components/github/github.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     IntroComponent,
     ContentComponent,
     LayoutComponent,
-    PostsComponent
+    PostsComponent,
+    GithubComponent
   ],
   imports: [
     BrowserModule,

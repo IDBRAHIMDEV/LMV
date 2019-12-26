@@ -1,0 +1,21 @@
+
+  <div class="row my-4">
+      <div class="col-md-12">
+          <h1>List of users</h1>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-4" *ngFor="let user of users">
+          <div class="card">
+              <img class="card-img-top" [src]="user.avatar_url" alt="">
+              <div class="card-body">
+                  <h4 class="card-title">{{ user.login }}</h4>
+                  <div class="card-text">
+                      <a [href]="user.html_url" class="btn btn-dark btn-block">
+                          leave to {{ user.login }}
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

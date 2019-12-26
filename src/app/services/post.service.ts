@@ -1,3 +1,4 @@
+import { Post } from './../models/post';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -9,15 +10,23 @@ export class PostService {
   constructor(private http: HttpClient) { }
 
   getAll() {
-    return this.http.get('https://jsonplaceholder.typicode.com/posts');
+    return this.http.get('http://localhost:5000/posts');
   }
 
-  persist(post: any) {
-    return this.http.post('https://jsonplaceholder.typicode.com/posts', post);
+  persist(post: Post) {
+    return this.http.post('http://localhost:5000/posts', post);
   }
 
   delete(id: number) {
-    return this.http.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
+    return this.http.delete(`http://localhost:5000/posts/${id}`);
+  }
+
+  update(post: Post) {
+    return this.http.put(`http://localhost:5000/posts/${post.id}`, post);
+  }
+
+  patchPost(id, data) {
+     return this.http.patch(`http://localhost:5000/posts/${id}`, data);
   }
 
 }

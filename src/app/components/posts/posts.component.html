@@ -1,47 +1,113 @@
 
 <div class="row my-3">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <h1>List of posts</h1>
+    </div>
+    <div class="col-md-6 text-right">
+        <button (click)="toggleForm()" class="btn btn-success">
+            <i class="fa fa-plus"></i>
+        </button>
     </div>
 </div>
 
-<div class="row mb-3">
+<div class="row mb-3" *ngIf="display">
     <div class="col-md-6 mx-auto">
+
+        <form #f="ngForm">
         <div class="form-group">
             <label for="">Title</label>
-            <input [(ngModel)]="myPost.title" type="text" class="form-control">
+            <input 
+              name="title"
+              (change)="info(title)" required 
+              minlength="6" 
+              maxlength="20" 
+             
+              pattern="[a-zA-Z0-9 ]*"
+              #title="ngModel" 
+              [(ngModel)]="myPost.title" 
+              type="text" 
+              class="form-control">
+            <div 
+              *ngIf="(title.touched || title.pristine) && title.invalid" 
+               class="alert alert-danger">
+               <div *ngIf="title.errors.required">This field is Required !</div>
+               <div *ngIf="title.errors.maxlength">This field is great then 20 caracters !</div>
+               <div *ngIf="title.errors.minlength">This field should be great than {{ title.errors.minlength.actualLength }} / {{ title.errors.minlength.requiredLength }} caracters !</div>
+              
+               <div *ngIf="title.errors.pattern">This field is not respect our pattern !</div>
+            </div>
         </div>
         <div class="form-group">
             <label for="">Body</label>
-            <textarea [(ngModel)]="myPost.body" rows="2" class="form-control"></textarea>
+            <textarea 
+               name="body" 
+               required 
+               #body="ngModel" 
+               [(ngModel)]="myPost.body" 
+               rows="2" 
+               class="form-control">
+            </textarea>
+            <div 
+              *ngIf="body.touched && body.invalid" 
+               class="alert alert-danger">
+               <div *ngIf="body.errors.required">This field is Required !</div>
+            </div>
         </div>
 
-        <button (click)="persistPost()" class="btn btn-primary btn-block">
-            <i class="fa fa-send"></i> Add post</button>
+        <button *ngIf="editable" [disabled]="f.invalid" (click)="updatePost(f)" class="btn btn-warning btn-block">
+            <i class="fa fa-refresh"></i> update post
+        </button>
+
+        <button *ngIf="!editable" [disabled]="f.invalid" (click)="persistPost(f)" class="btn btn-primary btn-block">
+            <i class="fa fa-send"></i> Add post
+        </button>
+
+        </form>
     </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="!posts.length; then dataNotExist else dataExist"></div>
+
+<ng-template #dataNotExist>
     <div class="col-md-12">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Body</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let post of posts">
-                    <td>{{ post.title }}</td>
-                    <td>{{ post.body }}</td>
-                    <td class="text-right" nowrap>
-                        <button class="btn btn-sm btn-warning mr-1"><i class="fa fa-pencil"></i></button>
-                        <button (click)="deletePost(post.id)" class="btn btn-sm btn-dark"><i class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div 
+        class="alert alert-danger" 
+           role="alert">
+       <strong>Posts not found !</strong>
+   </div>
     </div>
-</div>
+</ng-template>
+
+<ng-template #dataExist>
+    <div  class="row" *ngIf="posts.length">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Body</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr (dblclick)="deletePost(post.id)" *ngFor="let post of posts">
+                        <td> 
+                            <button (click)="switchActive(post)" class="btn btn-sm mr-3" [ngClass]="{
+                                'btn-success': post.active,
+                                'btn-danger': !post.active
+                            }">
+                                <i class="fa fa-power-off"></i>
+                            </button>
+                            {{ post.title }}</td>
+                        <td>{{ post.body }}</td>
+                        <td class="text-right" nowrap>
+                            <button (click)="editPost(post)" class="btn btn-sm btn-warning mr-1"><i class="fa fa-pencil"></i></button>
+                            <button (click)="deletePost(post.id)" class="btn btn-sm btn-dark"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>
 

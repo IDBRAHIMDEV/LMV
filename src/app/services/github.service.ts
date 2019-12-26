@@ -11,4 +11,8 @@ export class GithubService {
   getUsers() {
     return this.http.get('https://api.github.com/users');
   }
+
+  searchOnGitHub(data: string) {
+    return this.http.get(`https://api.github.com/search/users?q=${data}`)
+  }
 }

@@ -10,18 +10,18 @@ export class CoursesComponent implements OnInit {
   myCourse = {
     id: 0,
     name: '',
-    active: true
+    active: true,
+    vote: {
+      like: 0,
+      dislike: 0
+    }
   };
 
   courses = [
-    {id: 1, name: 'Learn VueJS',
-  active: true},
-    {id: 2, name: 'Learn React',
-  active: false},
-    {id: 3, name: 'Learn Angular',
-  active: false},
-    {id: 4, name: 'Learn Spring Boot',
-  active: true}
+    {id: 1, name: 'Learn VueJS', active: true, vote: {like: 20, dislike: 33}},
+    {id: 2, name: 'Learn React', active: false, vote: {like: 30, dislike: 13}},
+    {id: 3, name: 'Learn Angular', active: false, vote: {like: 12, dislike: 2}},
+    {id: 4, name: 'Learn Spring Boot', active: true, vote: {like: 9, dislike: 4}}
   ];
 
   constructor() { }
@@ -35,7 +35,11 @@ export class CoursesComponent implements OnInit {
     this.myCourse = {
       id: 0,
       name: '',
-      active: true
+      active: true,
+      vote: {
+        like: 0,
+        dislike: 0
+      }
     };
   }
 
@@ -46,6 +50,14 @@ export class CoursesComponent implements OnInit {
 
   statusCourse(course) {
     course.active = !course.active;
+  }
+
+  syncVote(data, course) {
+     if(data.type) {
+        course.vote.like = data.value;
+     }else {
+       course.vote.dislike = data.value
+     }
   }
 
 }

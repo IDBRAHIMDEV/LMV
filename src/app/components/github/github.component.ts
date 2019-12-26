@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class GithubComponent implements OnInit {
 
   users = [];
+  search: string = "";
   constructor(private githubService: GithubService) { }
 
   ngOnInit() {
@@ -18,6 +19,15 @@ export class GithubComponent implements OnInit {
   getUsers() {
     this.githubService.getUsers()
         .subscribe((users: any[]) => this.users = users)
+  }
+
+  searchUser() {
+    this.githubService.searchOnGitHub(this.search)
+        .subscribe(res => {
+          let { items }: any = res;
+
+          this.users = items;
+        })
   }
 
 }

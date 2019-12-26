@@ -16,9 +16,20 @@
                   'list-group-item-danger': l
               }" 
               *ngFor="let course of courses; index as i, first as f, last as l, even as e, odd as o">
-              index: {{ i }} - first: {{ f }} - last: {{ l }} - even: {{ e }} - odd: {{ o }}  
+              
               {{ course.name }}
-                <div class="text-right" id="options">
+              <div class="row">
+                  <div class="col-md-6">
+                      like: {{ course.vote.like }} - dislike : {{ course.vote.dislike }}
+                      <app-votes 
+                         [my-like]="course.vote.like" 
+                         [my-dislike]="course.vote.dislike"
+                         (incVote)="syncVote($event, course)"
+                         >
+                         
+                      </app-votes>
+                  </div>
+                  <div class="col-md-6 text-right">
                     <button class="btn btn-warning mr-1 btn-sm">
                         <i class="fa fa-pencil"></i>
                     </button>
@@ -35,7 +46,9 @@
                     }">
                         <i class="fa fa-power-off"></i>
                     </button>
-                </div>
+                  </div>
+              </div>
+              
             </li>
         </ul>
        
